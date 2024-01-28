@@ -1,14 +1,13 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Solution {
 
-    public static String decode(String filePath) {
+    public static String decode(String fileName) {
         List<String> content = new ArrayList<>();
         String decodedMessage = "";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        InputStream inputStream = Solution.class.getClassLoader().getResourceAsStream(fileName);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = br.readLine()) != null) {
                 content.add(line);
@@ -27,12 +26,17 @@ public class Solution {
             List<List<Integer>> pyramid = new ArrayList<>();
             int initIndex = 0;
             int lastIndex = 1;
-            for (int i = 1; i < sortedNumbers.size(); i++) {
-                lastIndex = i * (i + 1) /2;
-                if (lastIndex > sortedNumbers.size())
-                    break;
-                pyramid.add(new ArrayList<>(sortedNumbers.subList(initIndex, lastIndex)));
-                initIndex = lastIndex;
+            int n = 1;
+            boolean lastPyramidFloor = false;
+            while (!lastPyramidFloor) {
+                lastIndex = n * (n + 1) /2;
+                if (lastIndex > sortedNumbers.size()) {
+                    lastPyramidFloor = true;
+                } else {
+                    pyramid.add(new ArrayList<>(sortedNumbers.subList(initIndex, lastIndex)));
+                    initIndex = lastIndex;
+                    n++;
+                }
             }
 
             List<String> messageWords = new ArrayList<>();
@@ -47,9 +51,10 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        String filePath = "/Users/albertorodriguez/Downloads/pyramid/src/main/resources/coding_qual_input.txt";
+        String filePath = "coding_qual_input.txt";
 
         String decodedMessage = decode(filePath);
         System.out.println(decodedMessage);
+        //down dont nine lot work silver east duck done tone bit stop sun deal huge moment poem hold make like possible clock of bought
     }
 }
